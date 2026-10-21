@@ -1,0 +1,26 @@
+=== 1. Inyección en el Subject ===
+ERROR: usuario no válido: 'jgarcia/OU=PAS'
+
+=== 2. Caracteres no permitidos ===
+ERROR: usuario no válido: 'pepe;rm -rf'
+
+=== 3. Rol inexistente ===
+ERROR: rol no válido: 'ADMIN'
+
+=== 4. Emisión duplicada (jgarcia PDI portatil por segunda vez) ===
+ERROR: ya existe un certificado para jgarcia/portatil
+
+=== 5. Prueba positiva: segundo dispositivo BYOD (jgarcia PDI movil) ===
+[OK] Emitido serie 1002 -> jgarcia (PDI) [movil]
+
+=== 6. Ejecución por lotes (issue_batch.sh sobre users.csv) ===
+[OK] Emitido serie 1003 -> josema (PDI) [portatil]
+[OK] Emitido serie 1004 -> ana (PDI) [portatil]
+[OK] Emitido serie 1005 -> roberto (PDI) [movil]
+[OK] Emitido serie 1006 -> laura (PAS) [portatil]
+[OK] Emitido serie 1007 -> carlos (PAS) [portatil]
+[OK] Emitido serie 1008 -> marta (PAS) [tablet]
+[OK] Emitido serie 1009 -> kevin (INVESTIGADOR) [portatil]
+[OK] Emitido serie 100A -> mauricio (INVESTIGADOR) [portatil]
+[OK] Emitido serie 100B -> david (INVESTIGADOR) [movil]
+Resumen del lote -> Emitidos: 9 | Rechazados/Fallidos: 0

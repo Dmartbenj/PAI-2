@@ -1,0 +1,22 @@
+{"fecha": "2026-10-19T21:33:23", "evento": "HANDSHAKE_OK", "ip": "127.0.0.1:42436", "cn": "ana", "ou": "PDI", "version": "TLSv1.3", "suite": "TLS_AES_256_GCM_SHA384"}
+{"fecha": "2026-10-19T21:33:23", "evento": "LOGIN_OK", "ip": "127.0.0.1:42436", "usuario": "ana", "rol": "PDI"}
+{"fecha": "2026-10-19T21:33:23", "evento": "LOGOUT", "ip": "127.0.0.1:42436", "usuario": "ana"}
+{"fecha": "2026-10-19T21:33:24", "evento": "HANDSHAKE_OK", "ip": "127.0.0.1:42446", "cn": "ana", "ou": "PDI", "version": "TLSv1.3", "suite": "TLS_AES_256_GCM_SHA384"}
+{"fecha": "2026-10-19T21:33:24", "evento": "LOGIN_FAIL", "ip": "127.0.0.1:42446", "cn": "ana", "usuario": "ana", "motivo": "usuario o contraseña incorrectos"}
+{"fecha": "2026-10-19T21:33:24", "evento": "LOGIN_FAIL", "ip": "127.0.0.1:42446", "cn": "ana", "usuario": "ana", "motivo": "usuario o contraseña incorrectos"}
+{"fecha": "2026-10-19T21:33:24", "evento": "LOGIN_FAIL", "ip": "127.0.0.1:42446", "cn": "ana", "usuario": "ana", "motivo": "usuario o contraseña incorrectos"}
+{"fecha": "2026-10-19T21:33:24", "evento": "LOGIN_BLOQUEADO", "ip": "127.0.0.1:42446", "cn": "ana"}
+{"fecha": "2026-10-19T21:33:24", "evento": "HANDSHAKE_OK", "ip": "127.0.0.1:42460", "cn": "ana", "ou": "PDI", "version": "TLSv1.3", "suite": "TLS_AES_256_GCM_SHA384"}
+{"fecha": "2026-10-19T21:33:24", "evento": "LOGIN_FAIL", "ip": "127.0.0.1:42460", "cn": "ana", "usuario": "josema", "motivo": "el usuario no coincide con el certificado"}
+{"fecha": "2026-10-19T21:33:24", "evento": "DESCONEXION", "ip": "127.0.0.1:42460", "motivo": "conexión cerrada sin logout"}
+{"fecha": "2026-10-19T21:33:24", "evento": "HANDSHAKE_OK", "ip": "127.0.0.1:42476", "cn": "ana", "ou": "PDI", "version": "TLSv1.3", "suite": "TLS_AES_256_GCM_SHA384"}
+{"fecha": "2026-10-19T21:33:24", "evento": "DESCONEXION", "ip": "127.0.0.1:42476", "motivo": "conexión cerrada sin logout"}
+{"fecha": "2026-10-19T21:33:25", "evento": "HANDSHAKE_FAIL", "ip": "127.0.0.1:42488", "motivo": "[SSL: PEER_DID_NOT_RETURN_A_CERTIFICATE] peer did not return a certificate (_ssl.c:1082)"}
+{"fecha": "2026-10-19T21:33:25", "evento": "HANDSHAKE_OK", "ip": "127.0.0.1:42496", "cn": "prueba213321", "ou": "PAS", "version": "TLSv1.3", "suite": "TLS_AES_256_GCM_SHA384"}
+{"fecha": "2026-10-19T21:33:25", "evento": "LOGIN_OK", "ip": "127.0.0.1:42496", "usuario": "prueba213321", "rol": "PAS"}
+{"fecha": "2026-10-19T21:33:25", "evento": "LOGOUT", "ip": "127.0.0.1:42496", "usuario": "prueba213321"}
+{"fecha": "2026-10-19T21:33:26", "evento": "HANDSHAKE_FAIL", "ip": "127.0.0.1:42510", "motivo": "[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate revoked (_ssl.c:1082)"}
+{"fecha": "2026-10-19T21:33:26", "evento": "HANDSHAKE_OK", "ip": "127.0.0.1:42524", "cn": "prueba213321", "ou": "PAS", "version": "TLSv1.3", "suite": "TLS_AES_256_GCM_SHA384"}
+{"fecha": "2026-10-19T21:33:26", "evento": "LOGIN_OK", "ip": "127.0.0.1:42524", "usuario": "prueba213321", "rol": "PAS"}
+{"fecha": "2026-10-19T21:33:26", "evento": "LOGOUT", "ip": "127.0.0.1:42524", "usuario": "prueba213321"}
+{"fecha": "2026-10-19T21:33:27", "evento": "HANDSHAKE_FAIL", "ip": "127.0.0.1:42538", "motivo": "[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate revoked (_ssl.c:1082)"}

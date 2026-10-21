@@ -1,0 +1,48 @@
+[ ca ]
+default_ca = CA_default
+
+[ CA_default ]
+dir               = ./root
+certs             = $dir/certs
+crl_dir           = $dir/crl
+new_certs_dir     = $dir/newcerts
+database          = $dir/index.txt
+serial            = $dir/serial
+crlnumber         = $dir/crlnumber
+certificate       = $dir/certs/ca-root.crt
+private_key       = $dir/private/ca-root.key
+crl               = $dir/crl/ca-root.crl.pem
+default_md        = sha384
+default_days      = 1825
+default_crl_days  = 30
+crl_extensions    = crl_ext
+policy            = policy_strict
+
+[ policy_strict ]
+countryName             = match
+organizationName        = match
+organizationalUnitName  = optional
+commonName              = supplied
+
+[ req ]
+distinguished_name = req_dn
+string_mask        = utf8only
+default_md         = sha384
+
+[ req_dn ]
+commonName = Common Name
+
+[ v3_ca ]
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid:always, issuer
+basicConstraints       = critical, CA:TRUE
+keyUsage               = critical, keyCertSign, cRLSign
+
+[ v3_intermediate_ca ]
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid:always, issuer
+basicConstraints       = critical, CA:TRUE, pathlen:0
+keyUsage               = critical, keyCertSign, cRLSign
+
+[ crl_ext ]
+authorityKeyIdentifier = keyid:always

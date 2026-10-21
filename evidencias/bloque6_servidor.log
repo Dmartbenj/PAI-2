@@ -1,0 +1,14 @@
+[SERVER] Suites TLS 1.3 activas: ['TLS_AES_256_GCM_SHA384', 'TLS_CHACHA20_POLY1305_SHA256']
+[SERVER] Escuchando en 127.0.0.1:8443
+[SERVER] ACEPTADA ('127.0.0.1', 58961) | Versión: TLSv1.3 | Suite: TLS_AES_256_GCM_SHA384 | CN=jgarcia, OU=PDI
+[SERVER] Handshake RECHAZADO: [SSL: PEER_DID_NOT_RETURN_A_CERTIFICATE] peer did not return a certificate (_ssl.c:1032)
+[SERVER] Handshake RECHAZADO: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate revoked (_ssl.c:1032)
+[SERVER] Handshake RECHAZADO: [SSL: UNSUPPORTED_PROTOCOL] unsupported protocol (_ssl.c:1032)
+[SERVER] Handshake RECHAZADO: [SSL: NO_SHARED_CIPHER] no shared cipher (_ssl.c:1032)
+[SERVER] ACEPTADA ('127.0.0.1', 58978) | Versión: TLSv1.3 | Suite: TLS_AES_256_GCM_SHA384 | CN=jgarcia, OU=PDI
+[SERVER] Handshake RECHAZADO: [SSL: PEER_DID_NOT_RETURN_A_CERTIFICATE] peer did not return a certificate (_ssl.c:1032)
+[SERVER] Handshake RECHAZADO: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate revoked (_ssl.c:1032)
+[SERVER] Handshake RECHAZADO: [SSL: UNSUPPORTED_PROTOCOL] unsupported protocol (_ssl.c:1032)
+[SERVER] Handshake RECHAZADO: [SSL: NO_SHARED_CIPHER] no shared cipher (_ssl.c:1032)
+[SERVER] ACEPTADA ('127.0.0.1', 58983) | Versión: TLSv1.3 | Suite: TLS_AES_256_GCM_SHA384 | CN=jgarcia, OU=PDI
+[SERVER] Handshake RECHAZADO: [SSL: SSLV3_ALERT_BAD_CERTIFICATE] sslv3 alert bad certificate (_ssl.c:1032)

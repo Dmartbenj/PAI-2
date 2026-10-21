@@ -1,0 +1,164 @@
+Evidencias del servidor VPN, el cliente y el registro de usuarios (2026-10-19 21:33)
+
+=== PRUEBA 1: tests automáticos ===
+test_comprobar_password (test_db.TestBaseDatos.test_comprobar_password) ... ok
+test_identidad_inmutable (test_db.TestBaseDatos.test_identidad_inmutable) ... ok
+test_password_corta (test_db.TestBaseDatos.test_password_corta) ... ok
+test_password_no_se_guarda_en_claro (test_db.TestBaseDatos.test_password_no_se_guarda_en_claro) ... ok
+test_usuario_duplicado (test_db.TestBaseDatos.test_usuario_duplicado) ... ok
+test_bloqueo_tras_tres_fallos (test_servidor.TestServidor.test_bloqueo_tras_tres_fallos) ... ok
+test_login_mensaje_logout (test_servidor.TestServidor.test_login_mensaje_logout) ... ok
+test_mensaje_sin_login (test_servidor.TestServidor.test_mensaje_sin_login) ... ok
+test_sin_certificado (test_servidor.TestServidor.test_sin_certificado) ... ok
+test_sin_tls (test_servidor.TestServidor.test_sin_tls) ... ok
+test_tls12_rechazado (test_servidor.TestServidor.test_tls12_rechazado) ... ok
+test_usuario_distinto_del_certificado (test_servidor.TestServidor.test_usuario_distinto_del_certificado) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.812s
+
+OK
+
+=== PRUEBA 2: login correcto, mensaje y logout (RF2, RF4) ===
+$ python3 app/vpn_client.py --cert pki/issued/clients/ana-portatil-fullchain.crt --key pki/issued/clients/ana-portatil.key
+> login ana
+> msg hola desde el portatil de ana
+> logout
+--- respuesta del cliente ---
+Túnel establecido: TLSv1.3 TLS_AES_256_GCM_SHA384
+> {'ok': True, 'rol': 'PDI'}
+> {'ok': True, 'eco': 'hola desde el portatil de ana'}
+> {'ok': True}
+--- log del servidor ---
+{"fecha": "2026-10-19T21:33:23", "evento": "HANDSHAKE_OK", "ip": "127.0.0.1:42436", "cn": "ana", "ou": "PDI", "version": "TLSv1.3", "suite": "TLS_AES_256_GCM_SHA384"}
+{"fecha": "2026-10-19T21:33:23", "evento": "LOGIN_OK", "ip": "127.0.0.1:42436", "usuario": "ana", "rol": "PDI"}
+{"fecha": "2026-10-19T21:33:23", "evento": "LOGOUT", "ip": "127.0.0.1:42436", "usuario": "ana"}
+
+=== PRUEBA 3: contraseña incorrecta tres veces ===
+$ python3 app/vpn_client.py --cert pki/issued/clients/ana-portatil-fullchain.crt --key pki/issued/clients/ana-portatil.key
+> login ana
+> login ana
+> login ana
+> msg hola
+--- respuesta del cliente ---
+Túnel establecido: TLSv1.3 TLS_AES_256_GCM_SHA384
+> {'ok': False, 'msg': 'credenciales no válidas'}
+> {'ok': False, 'msg': 'credenciales no válidas'}
+> {'ok': False, 'msg': 'demasiados intentos'}
+> Conexión cerrada [Errno 32] Broken pipe
+--- log del servidor ---
+{"fecha": "2026-10-19T21:33:24", "evento": "HANDSHAKE_OK", "ip": "127.0.0.1:42446", "cn": "ana", "ou": "PDI", "version": "TLSv1.3", "suite": "TLS_AES_256_GCM_SHA384"}
+{"fecha": "2026-10-19T21:33:24", "evento": "LOGIN_FAIL", "ip": "127.0.0.1:42446", "cn": "ana", "usuario": "ana", "motivo": "usuario o contraseña incorrectos"}
+{"fecha": "2026-10-19T21:33:24", "evento": "LOGIN_FAIL", "ip": "127.0.0.1:42446", "cn": "ana", "usuario": "ana", "motivo": "usuario o contraseña incorrectos"}
+{"fecha": "2026-10-19T21:33:24", "evento": "LOGIN_FAIL", "ip": "127.0.0.1:42446", "cn": "ana", "usuario": "ana", "motivo": "usuario o contraseña incorrectos"}
+{"fecha": "2026-10-19T21:33:24", "evento": "LOGIN_BLOQUEADO", "ip": "127.0.0.1:42446", "cn": "ana"}
+
+=== PRUEBA 4: credenciales correctas de josema desde el portátil de ana ===
+$ python3 app/vpn_client.py --cert pki/issued/clients/ana-portatil-fullchain.crt --key pki/issued/clients/ana-portatil.key
+> login josema
+--- respuesta del cliente ---
+Túnel establecido: TLSv1.3 TLS_AES_256_GCM_SHA384
+> {'ok': False, 'msg': 'credenciales no válidas'}
+> Conexión cerrada EOF when reading a line
+--- log del servidor ---
+{"fecha": "2026-10-19T21:33:24", "evento": "HANDSHAKE_OK", "ip": "127.0.0.1:42460", "cn": "ana", "ou": "PDI", "version": "TLSv1.3", "suite": "TLS_AES_256_GCM_SHA384"}
+{"fecha": "2026-10-19T21:33:24", "evento": "LOGIN_FAIL", "ip": "127.0.0.1:42460", "cn": "ana", "usuario": "josema", "motivo": "el usuario no coincide con el certificado"}
+{"fecha": "2026-10-19T21:33:24", "evento": "DESCONEXION", "ip": "127.0.0.1:42460", "motivo": "conexión cerrada sin logout"}
+
+=== PRUEBA 5: mensaje sin haber hecho login ===
+$ python3 app/vpn_client.py --cert pki/issued/clients/ana-portatil-fullchain.crt --key pki/issued/clients/ana-portatil.key
+> msg hola
+--- respuesta del cliente ---
+Túnel establecido: TLSv1.3 TLS_AES_256_GCM_SHA384
+> {'ok': False, 'msg': 'operación no permitida'}
+> Conexión cerrada EOF when reading a line
+--- log del servidor ---
+{"fecha": "2026-10-19T21:33:24", "evento": "HANDSHAKE_OK", "ip": "127.0.0.1:42476", "cn": "ana", "ou": "PDI", "version": "TLSv1.3", "suite": "TLS_AES_256_GCM_SHA384"}
+{"fecha": "2026-10-19T21:33:24", "evento": "DESCONEXION", "ip": "127.0.0.1:42476", "motivo": "conexión cerrada sin logout"}
+
+=== PRUEBA 6: cliente sin certificado ===
+$ python3 app/vpn_client.py
+Túnel establecido: TLSv1.3 TLS_AES_256_GCM_SHA384
+> Conexión cerrada [Errno 104] Connection reset by peer
+--- log del servidor ---
+{"fecha": "2026-10-19T21:33:25", "evento": "HANDSHAKE_FAIL", "ip": "127.0.0.1:42488", "motivo": "[SSL: PEER_DID_NOT_RETURN_A_CERTIFICATE] peer did not return a certificate (_ssl.c:1082)"}
+
+=== PRUEBA 7: las contraseñas se guardan como hash scrypt con sal ===
+$ sqlite3 app/data/usuarios.db "SELECT usuario, rol, hex(sal), hex(hash) FROM usuarios LIMIT 3"
+josema|PDI|9D9CD9FC05C48F0388B4BC9873EAA6B3|A9CAEEEAAAF8CD61FF090C3353A22892BE8FA466468F77EB827444080292C54A98F52509875D82930EC640C573BFE2DE666124712BE30195807DD5342BC06330
+ana|PDI|11EF02706F50B466064148F0ECFC8869|507FCE707EEEC35A89780CB47F9DA45F74F1377C9156A8F4B813FF559DC67BAAF3F4D5CD2A2C23E134AD8C63E30C67CB47296B92974EECF5DE754CE6FFC45E92
+roberto|PDI|176C070F908DABC5CF44FAC7697DD919|5B67B13C73E5BA881C0F97138A844444DF64098C3F92936307EC6860603238DF958F4149DAF864CF643B2C006A0C54F42A6A320DDA88AD013CBFFCE5BD7796C3
+
+=== PRUEBA 8: la identidad registrada no se puede modificar ni borrar (RF1) ===
+$ sqlite3 app/data/usuarios.db "UPDATE usuarios SET rol = 'PAS' WHERE usuario = 'ana'"
+Error in 2nd command line argument: identidad inmutable
+$ sqlite3 app/data/usuarios.db "DELETE FROM usuarios WHERE usuario = 'ana'"
+Error in 2nd command line argument: identidad inmutable
+
+=== PRUEBA 9: alta de un usuario nuevo con emisión de su certificado (RF1) ===
+$ python3 app/registrar.py alta prueba213321 PAS portatil
+Contraseña: 
+Repite la contraseña: 
+[OK] Emitido serie 113E -> prueba213321 (PAS) [portatil]
+prueba213321 (PAS) registrado
+$ python3 app/vpn_client.py --cert pki/issued/clients/prueba213321-portatil-fullchain.crt --key pki/issued/clients/prueba213321-portatil.key
+> login prueba213321
+> logout
+--- respuesta del cliente ---
+Túnel establecido: TLSv1.3 TLS_AES_256_GCM_SHA384
+> {'ok': True, 'rol': 'PAS'}
+> {'ok': True}
+--- log del servidor ---
+{"fecha": "2026-10-19T21:33:25", "evento": "HANDSHAKE_OK", "ip": "127.0.0.1:42496", "cn": "prueba213321", "ou": "PAS", "version": "TLSv1.3", "suite": "TLS_AES_256_GCM_SHA384"}
+{"fecha": "2026-10-19T21:33:25", "evento": "LOGIN_OK", "ip": "127.0.0.1:42496", "usuario": "prueba213321", "rol": "PAS"}
+{"fecha": "2026-10-19T21:33:25", "evento": "LOGOUT", "ip": "127.0.0.1:42496", "usuario": "prueba213321"}
+
+=== PRUEBA 10: re-emisión del certificado; el antiguo deja de funcionar y el nuevo sí ===
+$ (cd pki && ./reissue_cert.sh prueba213321 PAS portatil)
+Iniciando re-emisión para prueba213321 (PAS) [portatil]...
+[OK] Revocado serie 113E -> prueba213321 [portatil] por motivo: superseded
+[OK] Emitido serie 113F -> prueba213321 (PAS) [portatil]
+[OK] Re-emisión completada con éxito para prueba213321 [portatil]
+$ python3 app/vpn_client.py --cert pki/issued/revoked/prueba213321-portatil-113E-fullchain.crt --key pki/issued/revoked/prueba213321-portatil-113E.key
+> login prueba213321
+--- respuesta del cliente ---
+Túnel establecido: TLSv1.3 TLS_AES_256_GCM_SHA384
+> Conexión cerrada [Errno 104] Connection reset by peer
+--- log del servidor ---
+{"fecha": "2026-10-19T21:33:26", "evento": "HANDSHAKE_FAIL", "ip": "127.0.0.1:42510", "motivo": "[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate revoked (_ssl.c:1082)"}
+$ python3 app/vpn_client.py --cert pki/issued/clients/prueba213321-portatil-fullchain.crt --key pki/issued/clients/prueba213321-portatil.key
+> login prueba213321
+> logout
+--- respuesta del cliente ---
+Túnel establecido: TLSv1.3 TLS_AES_256_GCM_SHA384
+> {'ok': True, 'rol': 'PAS'}
+> {'ok': True}
+--- log del servidor ---
+{"fecha": "2026-10-19T21:33:26", "evento": "HANDSHAKE_OK", "ip": "127.0.0.1:42524", "cn": "prueba213321", "ou": "PAS", "version": "TLSv1.3", "suite": "TLS_AES_256_GCM_SHA384"}
+{"fecha": "2026-10-19T21:33:26", "evento": "LOGIN_OK", "ip": "127.0.0.1:42524", "usuario": "prueba213321", "rol": "PAS"}
+{"fecha": "2026-10-19T21:33:26", "evento": "LOGOUT", "ip": "127.0.0.1:42524", "usuario": "prueba213321"}
+
+=== PRUEBA 11: revocación del certificado; el servidor recarga la CRL y lo rechaza ===
+$ (cd pki && ./revoke_cert.sh prueba213321 portatil keyCompromise)
+[OK] Revocado serie 113F -> prueba213321 [portatil] por motivo: keyCompromise
+$ python3 app/vpn_client.py --cert pki/issued/revoked/prueba213321-portatil-113F-fullchain.crt --key pki/issued/revoked/prueba213321-portatil-113F.key
+> login prueba213321
+--- respuesta del cliente ---
+Túnel establecido: TLSv1.3 TLS_AES_256_GCM_SHA384
+> Conexión cerrada [Errno 104] Connection reset by peer
+--- log del servidor ---
+{"fecha": "2026-10-19T21:33:27", "evento": "HANDSHAKE_FAIL", "ip": "127.0.0.1:42538", "motivo": "[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate revoked (_ssl.c:1082)"}
+
+=== PRUEBA 12: benchmark con 300 sesiones simultáneas (bench/results/resumen.md) ===
+| Modo | Clientes | Mensaje | Conexión p50/p95 (ms) | Login p50 (ms) | RTT p50/p95 (ms) | MB/s | CPU ms/sesión | RAM MiB |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| TCP sin cifrar | 50 | 1024 B | 5.6 / 14.2 | 127.1 | 0.93 / 2.13 | 91.8 | 43.4 | 236 |
+| TLS 1.3 + mTLS | 50 | 1024 B | 37.9 / 56.9 | 145.0 | 1.28 / 2.50 | 69.8 | 48.3 | 251 |
+| TCP sin cifrar | 100 | 1024 B | 11.5 / 27.4 | 211.9 | 1.76 / 4.32 | 94.6 | 42.7 | 261 |
+| TLS 1.3 + mTLS | 100 | 1024 B | 61.9 / 167.0 | 259.3 | 2.48 / 4.78 | 72.3 | 47.8 | 334 |
+| TCP sin cifrar | 200 | 1024 B | 27.6 / 54.8 | 385.7 | 3.73 / 8.80 | 90.9 | 42.4 | 316 |
+| TLS 1.3 + mTLS | 200 | 1024 B | 189.9 / 380.1 | 419.2 | 5.23 / 10.41 | 68.5 | 47.1 | 357 |
+| TCP sin cifrar | 300 | 1024 B | 42.6 / 77.2 | 558.7 | 5.63 / 13.53 | 89.2 | 41.9 | 332 |
+| TLS 1.3 + mTLS | 300 | 1024 B | 303.8 / 552.1 | 572.6 | 8.00 / 16.10 | 67.0 | 47.0 | 380 |
+| TCP sin cifrar | 300 | 32768 B | 46.0 / 88.7 | 573.4 | 25.26 / 53.94 | 643.5 | 42.9 | 320 |
+| TLS 1.3 + mTLS | 300 | 32768 B | 322.8 / 599.3 | 593.6 | 82.74 / 84.40 | 238.7 | 47.9 | 363 |

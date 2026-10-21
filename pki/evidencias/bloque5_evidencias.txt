@@ -1,0 +1,92 @@
+=== PRUEBA 1: Revocar dispositivo robado (jgarcia movil -> keyCompromise) ===
+[OK] Revocado serie 1002 -> jgarcia [movil] por motivo: keyCompromise
+V	271018163413Z		1000	unknown	/C=ES/O=U-Secure/OU=Servicios/CN=vpn.usecure.es
+V	270416163414Z		1001	unknown	/C=ES/O=U-Secure/OU=PDI/CN=jgarcia
+R	270416163416Z	261018163608Z,keyCompromise	1002	unknown	/C=ES/O=U-Secure/OU=PDI/CN=jgarcia
+V	270416163417Z		1003	unknown	/C=ES/O=U-Secure/OU=PDI/CN=josema
+V	270416163418Z		1004	unknown	/C=ES/O=U-Secure/OU=PDI/CN=ana
+V	270416163419Z		1005	unknown	/C=ES/O=U-Secure/OU=PDI/CN=roberto
+V	270416163420Z		1006	unknown	/C=ES/O=U-Secure/OU=PAS/CN=laura
+V	270416163421Z		1007	unknown	/C=ES/O=U-Secure/OU=PAS/CN=carlos
+V	270416163422Z		1008	unknown	/C=ES/O=U-Secure/OU=PAS/CN=marta
+V	270416163423Z		1009	unknown	/C=ES/O=U-Secure/OU=INVESTIGADOR/CN=kevin
+V	270416163425Z		100A	unknown	/C=ES/O=U-Secure/OU=INVESTIGADOR/CN=mauricio
+V	270416163426Z		100B	unknown	/C=ES/O=U-Secure/OU=INVESTIGADOR/CN=david
+
+=== PRUEBA 2: Publicación en la CRL de la CA Intermedia ===
+Certificate Revocation List (CRL):
+        Version 2 (0x1)
+        Signature Algorithm: ecdsa-with-SHA384
+        Issuer: C=ES, O=U-Secure, CN=U-Secure Issuing CA
+        Last Update: Oct 18 16:36:08 2026 GMT
+        Next Update: Nov 17 16:36:08 2026 GMT
+        CRL extensions:
+            X509v3 Authority Key Identifier: 
+                17:AA:BE:46:22:3D:6D:7B:C7:6E:77:B4:D0:1E:9D:14:E2:AA:6D:63
+            X509v3 CRL Number: 
+                4097
+Revoked Certificates:
+    Serial Number: 1002
+        Revocation Date: Oct 18 16:36:08 2026 GMT
+        CRL entry extensions:
+            X509v3 CRL Reason Code: 
+                Key Compromise
+    Signature Algorithm: ecdsa-with-SHA384
+    Signature Value:
+        30:65:02:31:00:a9:58:75:49:47:86:83:0c:e0:60:0c:83:6e:
+        b3:72:c4:3b:f3:52:26:23:ee:dd:77:1a:6a:da:14:30:74:2f:
+        9f:ce:21:b4:ac:21:f1:2b:bd:a0:9c:10:e1:37:8e:08:61:02:
+        30:57:c8:bc:12:06:ed:9f:b4:a9:3d:7c:54:01:ec:7f:cf:3c:
+        6c:3d:e4:a7:e8:48:d6:fe:73:8e:a6:b3:e6:95:f0:ce:cf:26:
+        49:78:55:36:c6:a6:7a:e9:d9:62:bb:69:ff
+
+=== PRUEBA 3: Verificación con CRL (-crl_check_all) de móvil revocado vs portátil vigente ===
+C=ES, O=U-Secure, OU=PDI, CN=jgarcia
+error 23 at 0 depth lookup: certificate revoked
+error issued/revoked/jgarcia-movil-1002.crt: verification failed
+issued/clients/jgarcia-portatil.crt: OK
+
+=== PRUEBA 4: Re-emisión (kevin INVESTIGADOR portatil -> superseded + nuevo serial) ===
+Iniciando re-emisión para kevin (INVESTIGADOR) [portatil]...
+[OK] Revocado serie 1009 -> kevin [portatil] por motivo: superseded
+[OK] Emitido serie 100C -> kevin (INVESTIGADOR) [portatil]
+[OK] Re-emisión completada con éxito para kevin [portatil]
+V	271018163413Z		1000	unknown	/C=ES/O=U-Secure/OU=Servicios/CN=vpn.usecure.es
+V	270416163414Z		1001	unknown	/C=ES/O=U-Secure/OU=PDI/CN=jgarcia
+R	270416163416Z	261018163608Z,keyCompromise	1002	unknown	/C=ES/O=U-Secure/OU=PDI/CN=jgarcia
+V	270416163417Z		1003	unknown	/C=ES/O=U-Secure/OU=PDI/CN=josema
+V	270416163418Z		1004	unknown	/C=ES/O=U-Secure/OU=PDI/CN=ana
+V	270416163419Z		1005	unknown	/C=ES/O=U-Secure/OU=PDI/CN=roberto
+V	270416163420Z		1006	unknown	/C=ES/O=U-Secure/OU=PAS/CN=laura
+V	270416163421Z		1007	unknown	/C=ES/O=U-Secure/OU=PAS/CN=carlos
+V	270416163422Z		1008	unknown	/C=ES/O=U-Secure/OU=PAS/CN=marta
+R	270416163423Z	261018163609Z,superseded	1009	unknown	/C=ES/O=U-Secure/OU=INVESTIGADOR/CN=kevin
+V	270416163425Z		100A	unknown	/C=ES/O=U-Secure/OU=INVESTIGADOR/CN=mauricio
+V	270416163426Z		100B	unknown	/C=ES/O=U-Secure/OU=INVESTIGADOR/CN=david
+V	270416163610Z		100C	unknown	/C=ES/O=U-Secure/OU=INVESTIGADOR/CN=kevin
+
+=== PRUEBAS NEGATIVAS ===
+ERROR: el certificado serie 1002 de jgarcia/movil no está vigente (estado actual: 'R')
+ERROR: no existe ningún certificado registrado para nadie/portatil
+ERROR: motivo no válido: 'porque_si'
+
+=== CONTENIDO FINAL DE issued/revocaciones.csv ===
+serial,usuario,dispositivo,motivo,fecha
+1002,jgarcia,movil,keyCompromise,2026-10-18T16:36:08Z
+1009,kevin,portatil,superseded,2026-10-18T16:36:10Z
+
+=== CONTENIDO FINAL DE issued/inventario.csv ===
+serial,usuario,rol,dispositivo,fecha
+1000,vpn.usecure.es,SERVICIOS,servidor,2026-10-18T16:34:13Z
+1001,jgarcia,PDI,portatil,2026-10-18T16:34:15Z
+1002,jgarcia,PDI,movil,2026-10-18T16:34:16Z
+1003,josema,PDI,portatil,2026-10-18T16:34:18Z
+1004,ana,PDI,portatil,2026-10-18T16:34:19Z
+1005,roberto,PDI,movil,2026-10-18T16:34:20Z
+1006,laura,PAS,portatil,2026-10-18T16:34:21Z
+1007,carlos,PAS,portatil,2026-10-18T16:34:22Z
+1008,marta,PAS,tablet,2026-10-18T16:34:23Z
+1009,kevin,INVESTIGADOR,portatil,2026-10-18T16:34:24Z
+100A,mauricio,INVESTIGADOR,portatil,2026-10-18T16:34:25Z
+100B,david,INVESTIGADOR,movil,2026-10-18T16:34:26Z
+100C,kevin,INVESTIGADOR,portatil,2026-10-18T16:36:11Z
